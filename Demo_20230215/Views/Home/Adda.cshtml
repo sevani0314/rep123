@@ -1,0 +1,51 @@
+﻿@model Demo_20230215.Models.EmployeeModel
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add</h2>
+
+<form method="post" action="@Url.Action("Add")">
+    <p>電腦編號<input type="text" id="txtEmpNo" name="txtEmpNo" required /></p>
+    <p>姓名<input type="text" id="txtName" name="Name" required /></p>
+    <p>分機<input type="number" id="txtExt" name="Ext" required /></p>
+    <p><input type="button" value="新增" class="btn btn-success" onclick="AddEmp()" /></p>
+</form>
+
+
+@section Scripts{
+    <script>
+
+        //新增的Function 判定可不可以加進去資料裡
+        function AddEmp() {
+            let a = document.getElementById("txtEmpNo").value;
+            let b = document.getElementById("txtName").value;
+            console.log(a)
+            console.log(b)
+            //if (a == EmployeeModel.EmpNo) {
+
+            //}
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Add")',
+                    data: { 'EmpNo': $('#txtEmpNo').val(), 'Name': $('#txtName').val(), 'Ext': $('#txtExt').val() },
+                    success: function (r) {
+                        if (r.IsSuccess) {
+                            alert('ok');
+                        }
+                        else {
+                            alert(r.Msg); //r.Msg
+                        }
+                    },
+                    error: function (a, b, c) {
+                        console.log(a);
+                        console.log(b);
+                        console.log(c);
+                    }
+                });
+
+           }
+    </script>
+}

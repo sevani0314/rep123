@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "Home Page";
+}
+<h2>員工資料</h2>
+<div class=" row">
+    <div class="col-md-4">輸入電腦編號查詢</div>
+    <div class="col-md-4"><input type="text" id="txtEmpNo" /></div>
+    <div class="col-md-4"><input type="button" id="btnSearch" class="btn btn-primary" value="查詢" onclick="GetEmpData()" /></div>
+    <div class="col-md-4"><a href="@Url.Action("Adda")" id="btnAdd" class="btn btn-primary">新增</a></div>
+</div>
+<div id="EmpDataList"></div>
+    
+@section Scripts{
+    <script>
+    $(function () {
+        GetEmpData();
+    });
+
+    function GetEmpData() {
+        var EmpNo = $('#txtEmpNo').val();
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("EmpData")',//要呼叫的位置
+            data: { 'EmpNo': EmpNo },
+            dataType: 'HTML',
+            success: function(r) {
+                 $('#EmpDataList').html(r);
+            },
+            error: function (a, b, c) {
+                console.log(a);
+                console.log(b);
+                console.log(c);
+            }
+        });
+    }
+
+    function Delete(EmpNo) {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeletePost")',//要呼叫的位置
+            data: { 'EmpNo': EmpNo },
+            
+            success: function (r) {     
+                
+                if (r.IsSuccess) {
+                    alert('OK');
+                    GetEmpData();
+                }
+                else {
+                    alert(r.Msg);
+                }
+            },
+            error: function (a, b, c) {
+                console.log(a);
+                console.log(b);
+                console.log(c);
+            }
+        });
+    }
+
+       
+    </script>
+} 
